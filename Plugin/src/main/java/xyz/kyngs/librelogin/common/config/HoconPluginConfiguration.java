@@ -12,6 +12,7 @@ import xyz.kyngs.librelogin.api.Logger;
 import xyz.kyngs.librelogin.api.configuration.CorruptedConfigurationException;
 import xyz.kyngs.librelogin.common.config.key.ConfigurationKey;
 import xyz.kyngs.librelogin.common.config.migrate.config.*;
+import xyz.kyngs.librelogin.common.util.GeneralUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class HoconPluginConfiguration {
         );
 
         var helperAdept = adept.getHelper();
+
+        var envOverrider = new EnvConfigurationOverrider(logger);
+        envOverrider.loadFromEnvironment(defaultKeys, helperAdept);
 
         if (!adept.isNewlyCreated() && plugin.getCryptoProvider(helperAdept.get(DEFAULT_CRYPTO_PROVIDER)) == null) {
             throw new CorruptedConfigurationException("Crypto provider not found");
